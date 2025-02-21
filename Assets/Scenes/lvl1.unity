@@ -5508,12 +5508,13 @@ PlayableDirector:
   m_SceneBindings:
   - key: {fileID: 8005822525491061314, guid: 394f2583a78022e4aab8e6ac7c98adc4, type: 2}
     value: {fileID: 1485864965}
-  - key: {fileID: 4926147926760000437, guid: 394f2583a78022e4aab8e6ac7c98adc4, type: 2}
-    value: {fileID: 345955018}
+  - key: {fileID: -3015411365189381560, guid: 394f2583a78022e4aab8e6ac7c98adc4, type: 2}
+    value: {fileID: 345955022}
   m_ExposedReferences:
     m_References:
     - a3548cec57b789b4aa30b6f4af0a8c2f: {fileID: 1485864965}
     - 8fd552add76e189409addd387b436663: {fileID: 1485864965}
+    - 00c3318c818ddb24e9a86d4362b169bf: {fileID: 345955018}
     - cc25877c521b7e341a26d57e51b50a0a: {fileID: 1485864965}
 --- !u!4 &1015010416
 Transform:
@@ -5659,7 +5660,7 @@ GameObject:
   m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1485864966
 MonoBehaviour:
   m_ObjectHideFlags: 0
