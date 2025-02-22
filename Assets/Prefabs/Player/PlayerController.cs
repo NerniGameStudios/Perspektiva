@@ -5,45 +5,52 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private CharacterController _characterContoller;
-    [SerializeField] private Transform _cameraTransform;
+
     [SerializeField] private float speed = 3f;
-    [SerializeField] private float angleMaxYCamera = 60f;
-    [SerializeField] private float Sensitivity = 100f;
-    [SerializeField] private float _cameraHor = 0f;
-    [SerializeField] private float _cameraVer = 0f;
-    [SerializeField] private float _speedCamera = 0.1f;
+    [SerializeField] private float gravity = -9.81f;
+    [SerializeField] private float Jamp = 2f;
+    private float velocity;
+ 
     private void Start()
     {
         _characterContoller = GetComponent<CharacterController>();
-        _cameraTransform = transform.GetChild(0).GetComponent<Transform>();
+        
     }
 
-    void FixedUpdate()
-    {
+void Update() {
+    
+Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        
+if(_characterContoller.isGrounded)if(Input.GetKeyDown(KeyCode.Space))Jmp();
+
+
+}
+ void FixedUpdate() {
+        
+    
+    
         MoveLogic();
     }
-    private void LateUpdate()
-    {
-        CameraLogic();
-    }
+   
 
-    private void CameraLogic()
-    {
-        float hor = Input.GetAxis("Mouse X") * Sensitivity * Time.deltaTime;
-        float ver = Input.GetAxis("Mouse Y") * Sensitivity * Time.deltaTime;
-
-        _cameraVer -= ver;
-        _cameraHor += hor;
-        
-
-        _cameraVer = Mathf.Clamp(_cameraVer, -angleMaxYCamera, angleMaxYCamera);
-        _cameraTransform.localRotation = Quaternion.Lerp(_cameraTransform.localRotation, Quaternion.Euler(_cameraVer, 0f, 0f), _speedCamera);
-        transform.localRotation = Quaternion.Lerp(_cameraTransform.localRotation, Quaternion.Euler(0f, _cameraHor, 0f), _speedCamera);
-    }
+    
 
     private void MoveLogic()
     {
-        _characterContoller.Move(_movement * speed * Time.deltaTime);
+        if(_characterContoller.isGrounded && velocity < 0)velocity = -2;
+
+        
+        _characterContoller.Move(_movement * speed * Time.fixedDeltaTime);
+
+        velocity += gravity * Time.fixedDeltaTime;
+        _characterContoller.Move(Vector3.up * velocity * Time.fixedDeltaTime);
+
+
+        
+    }
+    void Jmp(){
+        velocity = MathF.Sqrt(Jamp * -2 * gravity);
     }
 
     private Vector3 _movement
