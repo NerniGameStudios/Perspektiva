@@ -7,6 +7,7 @@ public class ObjController : MonoBehaviour
     public GameObject Obj;
     public GameObject Pointer;
     public GameObject UIobj;
+    bool flagObj;
 Vector3 scll;
   
     void Start()
@@ -25,14 +26,52 @@ Vector3 scll;
         RaycastHit hit;
         Physics.Raycast(ray,out hit);
 
-        if(hit.collider.gameObject.tag == "Obj"){Obj = hit.collider.gameObject; UIobj.SetActive(true);}
+
+        if(!flagObj){
+            if(hit.collider.gameObject.tag == "Obj"){Obj = hit.collider.gameObject; UIobj.SetActive(true);}
         else{UIobj.SetActive(false); }
+        }
+        
 
             
         if(Input.GetMouseButtonDown(0)){
            scll = Obj.transform.localScale;
+           flagObj =true;
+        }
+        if(Input.GetMouseButtonUp(0)){
+           
+           flagObj = false;
+           Obj.GetComponent<BoxCollider>().enabled = true;
         }
         
+        if(Input.GetMouseButton(1))
+        {
+           // Vector3 scl = Obj.transform.localScale;
+           
+          
+            
+
+            Obj.transform.position = hit.point + hit.normal;
+            Obj.transform.rotation = Pointer.transform.rotation;
+
+           
+        }
+        if(Input.GetMouseButtonUp(1))
+        {
+           // Vector3 scl = Obj.transform.localScale;
+           
+          
+            Obj.GetComponent<BoxCollider>().enabled = true;
+            Obj.GetComponent<Rigidbody>().isKinematic = false;
+            
+
+            
+
+           
+        }
+
+
+
         if(Input.GetMouseButton(0))
         {
            // Vector3 scl = Obj.transform.localScale;
@@ -47,12 +86,15 @@ Vector3 scll;
 
             Obj.GetComponent<Rigidbody>().isKinematic = false;
         }
+        
         else
         {
 
-            Obj.GetComponent<BoxCollider>().enabled = true;
+            
             Obj = null;
         }
+
+        
         
 
         
