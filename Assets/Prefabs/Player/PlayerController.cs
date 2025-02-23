@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private CharacterController _characterContoller;
+    private Rigidbody rb;
 
     [SerializeField] private float speed = 3f;
     [SerializeField] private float gravity = -9.81f;
@@ -14,6 +15,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         _characterContoller = GetComponent<CharacterController>();
+        rb = GetComponent<Rigidbody>();
         
     }
 
@@ -22,7 +24,7 @@ void Update() {
 Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-if(_characterContoller.isGrounded)if(Input.GetKeyDown(KeyCode.Space))Jmp();
+//f(_characterContoller.isGrounded)if(Input.GetKeyDown(KeyCode.Space))Jmp();
 
 
 }
@@ -30,28 +32,14 @@ if(_characterContoller.isGrounded)if(Input.GetKeyDown(KeyCode.Space))Jmp();
         
     
     
-        MoveLogic();
+        rb.MovePosition(transform.position +_movement * speed * Time.fixedDeltaTime);
     }
    
 
     
 
-    private void MoveLogic()
-    {
-        if(_characterContoller.isGrounded && velocity < 0)velocity = -2;
-
-        
-        _characterContoller.Move(_movement * speed * Time.fixedDeltaTime);
-
-        velocity += gravity * Time.fixedDeltaTime;
-        _characterContoller.Move(Vector3.up * velocity * Time.fixedDeltaTime);
-
-
-        
-    }
-    void Jmp(){
-        velocity = MathF.Sqrt(Jamp * -2 * gravity);
-    }
+    
+   
 
     private Vector3 _movement
     {
@@ -64,10 +52,5 @@ if(_characterContoller.isGrounded)if(Input.GetKeyDown(KeyCode.Space))Jmp();
             return move;
         }
     }
-    private void OnCollisionStay(Collision other) {
-        if(other.gameObject.tag == "Obj")
-        {
-            other.gameObject.GetComponent<Rigidbody>().AddForce(transform.forward);
-        }
-    }
+ 
 }

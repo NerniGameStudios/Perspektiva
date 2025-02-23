@@ -29,7 +29,7 @@ public class MouseLook : MonoBehaviour
 			sensitivityVert += 2.5f;
 		}
 	}
-	void Update() {
+	void LateUpdate() {
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
 		

@@ -78,7 +78,7 @@ Vector3 scll;
                 float scale = Vector3.Distance(Obj.transform.position,transform.position);
                 Obj.transform.localScale =   (Vector3.one * 0.08F  * scale);
                 Obj.GetComponent<Rigidbody>().velocity = (hit.point - Obj.transform.position) * speedpod;
-                Obj.transform.rotation = Pointer.transform.rotation;
+               // Obj.transform.rotation = Pointer.transform.rotation;
                 if(Input.GetMouseButtonUp(0))
                         {
                             Obj.layer = LayerMask.NameToLayer("Default");
