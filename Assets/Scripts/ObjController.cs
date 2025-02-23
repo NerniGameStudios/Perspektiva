@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ObjController : MonoBehaviour
@@ -8,6 +9,9 @@ public class ObjController : MonoBehaviour
     public GameObject Pointer;
     public GameObject UIobj;
     bool flagObj;
+    int mode;
+    public float speedpod =5;
+
 Vector3 scll;
   
     void Start()
@@ -26,76 +30,92 @@ Vector3 scll;
         RaycastHit hit;
         Physics.Raycast(ray,out hit);
 
-
-        if(!flagObj){
-            if(hit.collider.gameObject.tag == "Obj"){Obj = hit.collider.gameObject; UIobj.SetActive(true);}
-        else{UIobj.SetActive(false); }
-        }
-        
-
-            
-        if(Input.GetMouseButtonDown(0)){
-           scll = Obj.transform.localScale;
-           flagObj =true;
-        }
-        if(Input.GetMouseButtonUp(0)){
-           
-           flagObj = false;
-           Obj.GetComponent<BoxCollider>().enabled = true;
-        }
-        
-        if(Input.GetMouseButton(1))
+        if(!flagObj)
         {
-           // Vector3 scl = Obj.transform.localScale;
-           
-          
-            
+            if(hit.collider.gameObject.tag == "Obj")
+             {
+                      UIobj.SetActive(true);   
+                     if(Input.GetMouseButtonDown(0))
+                        {
+                             Obj = hit.collider.gameObject;
+                             //Obj.GetComponent<BoxCollider>().enabled = false;
+                            Obj.layer = LayerMask.NameToLayer("Ignore Raycast");
+                             flagObj = true;
+                             UIobj.SetActive(false);  
+                            
+                             mode = 1;
+                        }
+                        if(Input.GetMouseButtonDown(1))
+                        {
+                             Obj = hit.collider.gameObject;
+                            Obj.GetComponent<Rigidbody>().useGravity = !Obj.GetComponent<Rigidbody>().useGravity;
+                             flagObj = true;
+                             UIobj.SetActive(false);  
+                              mode = 2;
+                        }
 
-            Obj.transform.position = hit.point + hit.normal;
-            Obj.transform.rotation = Pointer.transform.rotation;
-
-           
+                        if(Input.GetMouseButtonDown(2))
+                        {
+                             Obj = hit.collider.gameObject;
+                            Obj.GetComponent<Rigidbody>().useGravity = !Obj.GetComponent<Rigidbody>().useGravity;
+                            Obj = null;
+                             
+                              
+                        }
+             }
+             else
+             {      
+                    
+                    UIobj.SetActive(false);   
+             }
         }
-        if(Input.GetMouseButtonUp(1))
-        {
-           // Vector3 scl = Obj.transform.localScale;
-           
-          
-            Obj.GetComponent<BoxCollider>().enabled = true;
-            Obj.GetComponent<Rigidbody>().isKinematic = false;
-            
-
-            
-
-           
-        }
-
-
-
-        if(Input.GetMouseButton(0))
-        {
-           // Vector3 scl = Obj.transform.localScale;
-            float scale = Vector3.Distance(Obj.transform.position,transform.position);
-            Obj.transform.localScale =  Vector3.one * 0.08F * scale;
-            
-            Obj.GetComponent<BoxCollider>().enabled = false;
-            Obj.GetComponent<Rigidbody>().isKinematic = true;
-
-            Obj.transform.position = hit.point + hit.normal;
-            Obj.transform.rotation = Pointer.transform.rotation;
-
-            Obj.GetComponent<Rigidbody>().isKinematic = false;
-        }
-        
         else
         {
+           
+            switch(mode)
+            {
+                case 1:
+                float scale = Vector3.Distance(Obj.transform.position,transform.position);
+                Obj.transform.localScale =   (Vector3.one * 0.08F  * scale);
+                Obj.GetComponent<Rigidbody>().velocity = (hit.point - Obj.transform.position) * speedpod;
+                Obj.transform.rotation = Pointer.transform.rotation;
+                if(Input.GetMouseButtonUp(0))
+                        {
+                            Obj.layer = LayerMask.NameToLayer("Default");
+                             //Obj.GetComponent<BoxCollider>().enabled = true;
+                             Obj = null;
+                            flagObj = false;
+                             mode = 0; 
+                        }
+
+                break;
+                case 2:
+                Obj.GetComponent<Rigidbody>().velocity = (Pointer.transform.position - Obj.transform.position) * speedpod;
+                
+                if(Input.GetMouseButtonUp(1))
+                        {
+                              Obj.GetComponent<Rigidbody>().useGravity = !Obj.GetComponent<Rigidbody>().useGravity;
+                             Obj = null;
+                             flagObj = false;
+                             mode = 0; 
+                        }
+                break;
+            }
+            
 
             
-            Obj = null;
+            
+
         }
+        
+
+
+            
+        
 
         
-        
+         //float scale = Vector3.Distance(Obj.transform.position,transform.position);
+          //  Obj.transform.localScale =  Vector3.one * 0.08F * scale;
 
         
     }

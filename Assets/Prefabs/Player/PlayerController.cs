@@ -21,7 +21,7 @@ void Update() {
     
 Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-        
+
 if(_characterContoller.isGrounded)if(Input.GetKeyDown(KeyCode.Space))Jmp();
 
 
@@ -62,6 +62,12 @@ if(_characterContoller.isGrounded)if(Input.GetKeyDown(KeyCode.Space))Jmp();
 
             Vector3 move = transform.right * hor + transform.forward * ver;
             return move;
+        }
+    }
+    private void OnCollisionStay(Collision other) {
+        if(other.gameObject.tag == "Obj")
+        {
+            other.gameObject.GetComponent<Rigidbody>().AddForce(transform.forward);
         }
     }
 }
