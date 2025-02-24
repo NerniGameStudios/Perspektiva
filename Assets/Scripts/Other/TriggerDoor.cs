@@ -9,7 +9,9 @@ public class TriggerDoor : MonoBehaviour
 
     public Door d;
     public GameObject vis;
+    public AudioSource a;
 
+    bool flag;
 
 
     private void OnTriggerEnter(Collider other) {
@@ -17,6 +19,12 @@ public class TriggerDoor : MonoBehaviour
         {
             d.Active = false;
             vis.SetActive(false);
+            if(!flag)
+            {
+             a.Play();
+             flag = true;
+            }
+            
         }
     }
 }
