@@ -216,6 +216,10 @@ QualitySettings:
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
     excludedTargetPlatforms: []
+<<<<<<< Updated upstream
+=======
+  m_TextureMipmapLimitGroupNames: []
+>>>>>>> Stashed changes
   m_PerPlatformDefaultQuality:
     Android: 2
     Lumin: 5
