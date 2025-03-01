@@ -5,46 +5,41 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private CharacterController _characterContoller;
-    [SerializeField] private Transform _cameraTransform;
+    private Rigidbody rb;
+
     [SerializeField] private float speed = 3f;
-    [SerializeField] private float angleMaxYCamera = 60f;
-    [SerializeField] private float Sensitivity = 100f;
-    [SerializeField] private float _cameraHor = 0f;
-    [SerializeField] private float _cameraVer = 0f;
-    [SerializeField] private float _speedCamera = 0.1f;
+    [SerializeField] private float gravity = -9.81f;
+    [SerializeField] private float Jamp = 2f;
+    private float velocity;
+ 
     private void Start()
     {
         _characterContoller = GetComponent<CharacterController>();
-        _cameraTransform = transform.GetChild(0).GetComponent<Transform>();
-    }
-
-    void FixedUpdate()
-    {
-        MoveLogic();
-    }
-    private void LateUpdate()
-    {
-        CameraLogic();
-    }
-
-    private void CameraLogic()
-    {
-        float hor = Input.GetAxis("Mouse X") * Sensitivity * Time.deltaTime;
-        float ver = Input.GetAxis("Mouse Y") * Sensitivity * Time.deltaTime;
-
-        _cameraVer -= ver;
-        _cameraHor += hor;
+        rb = GetComponent<Rigidbody>();
         
-
-        _cameraVer = Mathf.Clamp(_cameraVer, -angleMaxYCamera, angleMaxYCamera);
-        _cameraTransform.localRotation = Quaternion.Lerp(_cameraTransform.localRotation, Quaternion.Euler(_cameraVer, 0f, 0f), _speedCamera);
-        transform.localRotation = Quaternion.Lerp(_cameraTransform.localRotation, Quaternion.Euler(0f, _cameraHor, 0f), _speedCamera);
     }
 
-    private void MoveLogic()
-    {
-        _characterContoller.Move(_movement * speed * Time.deltaTime);
+void Update() {
+    
+Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+//f(_characterContoller.isGrounded)if(Input.GetKeyDown(KeyCode.Space))Jmp();
+
+
+}
+ void FixedUpdate() {
+        
+    
+    
+        rb.MovePosition(transform.position +_movement * speed * Time.fixedDeltaTime);
     }
+   
+
+    
+
+    
+   
 
     private Vector3 _movement
     {
@@ -57,4 +52,5 @@ public class PlayerController : MonoBehaviour
             return move;
         }
     }
+ 
 }
