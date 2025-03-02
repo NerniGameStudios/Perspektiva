@@ -265,7 +265,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5242050427239358500
 Transform:
   m_ObjectHideFlags: 0
@@ -5312,6 +5312,7 @@ MonoBehaviour:
   eff1: {fileID: 2794481136350023455}
   eff2: {fileID: 2794481136350023455}
   eff3: {fileID: 2794481136350023455}
+  pr1: {fileID: 0}
   speedpod: 5
 --- !u!1 &3244176963464455228
 GameObject:

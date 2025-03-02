@@ -13,6 +13,8 @@ public class ObjController : MonoBehaviour
     public GameObject eff2;
     public GameObject eff3;
 
+    public ParticleSystem pr1;
+
     bool flagObj;
     int mode;
     public float speedpod =5;
