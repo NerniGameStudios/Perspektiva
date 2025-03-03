@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class LensContoller : MonoBehaviour
@@ -23,6 +24,10 @@ public class LensContoller : MonoBehaviour
         }
         else
         {
+            if (_laserLine.Lens != null)
+            {
+                _laserLine.Lens.GetComponent<LaserLine>().isActiveLazer = false;
+            }
             _laserLine.Lens = null;
             _laserLine.isIsocknikLazer = false;
             _renderer.material = _glassMaterial;

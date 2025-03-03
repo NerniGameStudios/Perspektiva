@@ -50,6 +50,7 @@ public class LensBoom : MonoBehaviour
             }
             if(LensAllBoom)
             {
+                Debug.LogWarning("Boom");
                 Boom(isActiveLazer);
             }
             
@@ -60,6 +61,8 @@ public class LensBoom : MonoBehaviour
                 if (lens1 == null || lens2 == null) break;
                 if (isActiveLazer[i].Lens == lens2 && isActiveLazer[i - 1].Lens == lens1)
                 {
+                    Debug.LogWarning("Boom");
+
                     Boom(isActiveLazer);
                 }
             }

@@ -38,6 +38,8 @@ public class LaserLine : MonoBehaviour
         {
             lineRenderer.SetPosition(0, transform.position);
             lineRenderer.SetPosition(1, transform.position);
+            
+
             return;
         }
 
@@ -57,20 +59,16 @@ public class LaserLine : MonoBehaviour
                 Lens.GetComponent<LaserLine>().isIsocknikLazer = true;
 
             }
-            else if (Lens != objectHit && objectHit.tag == "Lens")
+            if (objectHit == Lens && !Lens.GetComponent<LaserLine>().isActiveLazer) Lens.GetComponent<LaserLine>().isActiveLazer = true;
+            if (Lens != objectHit && objectHit.tag == "Lens")
             {
                 Lens.GetComponent<LaserLine>().isActiveLazer = false;
                 Lens.GetComponent<LaserLine>().isIsocknikLazer = false;
                 Lens = objectHit;
                 Lens.GetComponent<LaserLine>().isActiveLazer = true;
                 Lens.GetComponent<LaserLine>().isIsocknikLazer = true;
-                if(Lens.GetComponent<LaserLine>().Lens == gameObject)
-                {
-                    
-                }
-
             }
-            else if (Lens != objectHit && Lens != null)
+            if (Lens != objectHit && Lens != null)
             {
                 Lens.GetComponent<LaserLine>().isActiveLazer = false;
                 Lens.GetComponent<LaserLine>().isIsocknikLazer = false;
