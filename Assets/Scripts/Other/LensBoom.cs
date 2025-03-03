@@ -33,6 +33,8 @@ public class LensBoom : MonoBehaviour
     {
         while (true)
         {
+            yield return new WaitForSeconds(3f);
+
             Debug.Log("Proverka Lens");
             List<LaserLine> isActiveLazer = new List<LaserLine>();
             foreach (LaserLine len in listLins)
@@ -41,6 +43,7 @@ public class LensBoom : MonoBehaviour
                     isActiveLazer.Add(len);
             }
             bool LensAllBoom = true;
+            if (isActiveLazer.Count == 0) continue;
             foreach (LaserLine len in isActiveLazer)
             {
                 if (len.objectHit.tag != "Lens")
@@ -67,7 +70,6 @@ public class LensBoom : MonoBehaviour
                 }
             }
 
-            yield return new WaitForSeconds(3f);
         }
     }
 
