@@ -39,7 +39,7 @@ Vector3 scll;
 
         if(!flagObj)
         {
-            if(hit.collider.gameObject.tag == "Obj")
+            if(hit.collider.gameObject.tag == "Obj" || hit.collider.gameObject.tag == "Lens")
              {
                       UIobj.SetActive(true);   
                      if(Input.GetMouseButtonDown(0))
