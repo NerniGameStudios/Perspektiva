@@ -12,6 +12,8 @@ public class LaserLine : MonoBehaviour
     [SerializeField] public GameObject Lens;
     [SerializeField] private GameObject _Finish;
     public GameObject objectHit;
+
+    public GameObject Light;
     private Rigidbody _Rigidbody;
     
     void Start()
@@ -49,9 +51,22 @@ public class LaserLine : MonoBehaviour
         lineRenderer.SetPosition(0, transform.position);
         lineRenderer.SetPosition(1, hit.point);
         objectHit = hit.collider.gameObject;
-        string tag = objectHit.tag;
+        string tag = objectHit.tag; 
+        if (isActiveLazer && Light != null )
+            {
+                Light.SetActive(true);
+                Light.transform.position = hit.point;
+            }
+            else
+            {
+                Light.SetActive(false);
+            }
         if (objectHit != null)
         {
+
+           
+
+
             if (objectHit.tag == "Lens" && Lens == null)
             {
                 Lens = objectHit;
@@ -94,11 +109,13 @@ public class LaserLine : MonoBehaviour
                 _Finish = objectHit;
                 _Finish.GetComponent<ElectricalSystem>().Active = true;  
             }
-            else if (_Finish != objectHit && _Finish != null)
+            else
             {
                 _Finish.GetComponent<ElectricalSystem>().Active = false;
-                _Finish = null;
+               
             }
+
+            
         }
     }
 }

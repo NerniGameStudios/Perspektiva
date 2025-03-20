@@ -13,12 +13,29 @@ public class SettingsGameManager : MonoBehaviour
     [SerializeField] TMP_Dropdown _dropdownSmoothing;
     [SerializeField] Toggle _tooggleFullScreen;
     [SerializeField] Slider _sliderMouseSensivity;
+    [SerializeField] Slider _sliderSound;
+    [SerializeField] Slider _sliderSoundEffects;
+    [SerializeField] TMP_Text _textSound;
+    [SerializeField] TMP_Text _textSoundEffects;
     [SerializeField] TMP_Text _textMouseSensivity;
     [SerializeField] TMP_Text _apply_text;
 
     [SerializeField] SaveSettingsGame saveSettingsGame = null;
     private Color _startColorApplyBtn;
-    private void Awake()
+
+
+    private void Update() {
+
+        _textSoundEffects.text =_sliderSoundEffects.value.ToString("F2");
+        _textSound.text =_sliderSound.value.ToString("F2");
+        PlayerPrefs.SetFloat("SoundEffects", _sliderSoundEffects.value);
+        PlayerPrefs.SetFloat("Sound", _sliderSound.value);
+
+        Cursor.lockState = CursorLockMode.None;
+		Cursor.visible = true;
+        
+    }
+    private void Start()
     {
         _ScreenRes = Screen.resolutions;
         Resolution currentRes = Screen.currentResolution;
@@ -55,6 +72,15 @@ public class SettingsGameManager : MonoBehaviour
         _dropdownScreenResolutions.value = saveSettingsGame._indexScreenResolutions;
         saveSettingsGame._mouseSensivity = SaveSettingsGame.getSensivityMouse();
         _sliderMouseSensivity.value = saveSettingsGame._mouseSensivity;
+
+        if( PlayerPrefs.GetFloat("SoundEffects") > 1)
+        {
+             PlayerPrefs.SetFloat("SoundEffects", 0.9f);
+             PlayerPrefs.SetFloat("Sound", 0.9f);
+        }
+
+         _sliderSoundEffects.value = PlayerPrefs.GetFloat("SoundEffects");
+       _sliderSound.value = PlayerPrefs.GetFloat("Sound");
     }
 
     public void OnChangesInSettings ()
@@ -94,6 +120,9 @@ public class SettingsGameManager : MonoBehaviour
         Screen.SetResolution(_ScreenRes[indx].width, _ScreenRes[indx].height, _tooggleFullScreen.isOn);
         QualitySettings.antiAliasing = getAntiAlisaingDropDown();
         _apply_text.color = _startColorApplyBtn;
+
+        
+
     }
 
     private int getAntiAlisaingDropDown()
