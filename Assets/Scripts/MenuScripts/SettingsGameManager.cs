@@ -37,6 +37,14 @@ public class SettingsGameManager : MonoBehaviour
     }
     private void Start()
     {
+        if( PlayerPrefs.GetFloat("SoundEffects") == 0)
+        {
+             PlayerPrefs.SetFloat("SoundEffects", 0.9f);
+             PlayerPrefs.SetFloat("Sound", 0.9f);
+        }
+
+         _sliderSoundEffects.value = PlayerPrefs.GetFloat("SoundEffects");
+       _sliderSound.value = PlayerPrefs.GetFloat("Sound");
         _ScreenRes = Screen.resolutions;
         Resolution currentRes = Screen.currentResolution;
         int indxCurrentRes = 0;
@@ -73,14 +81,7 @@ public class SettingsGameManager : MonoBehaviour
         saveSettingsGame._mouseSensivity = SaveSettingsGame.getSensivityMouse();
         _sliderMouseSensivity.value = saveSettingsGame._mouseSensivity;
 
-        if( PlayerPrefs.GetFloat("SoundEffects") > 1)
-        {
-             PlayerPrefs.SetFloat("SoundEffects", 0.9f);
-             PlayerPrefs.SetFloat("Sound", 0.9f);
-        }
-
-         _sliderSoundEffects.value = PlayerPrefs.GetFloat("SoundEffects");
-       _sliderSound.value = PlayerPrefs.GetFloat("Sound");
+        
     }
 
     public void OnChangesInSettings ()
