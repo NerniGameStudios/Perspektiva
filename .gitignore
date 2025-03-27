@@ -10,8 +10,13 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
+<<<<<<< HEAD
 .vscode/
 /ProjectSettings.asset
+=======
+PL/
+modelsBlend/
+>>>>>>> NGS_develop
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
 /[Mm]emoryCaptures/
@@ -26,8 +31,9 @@
 /[Aa]ssets/Plugins/Editor/JetBrains*
 
 # Visual Studio cache directory
+.vscode/
 .vs/
-
+.vsconfig
 # Gradle cache directory
 .gradle/
 

@@ -1,17 +1,21 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SettingsGameManager : MonoBehaviour
 {
-    List<string> _listScreenResolutions = new List<string>();
-    Resolution[] _ScreenRes;
-
+   
+    Resolution [] res;
     [SerializeField] TMP_Dropdown _dropdownScreenResolutions;
-    [SerializeField] TMP_Dropdown _dropdownSmoothing;
-    [SerializeField] Toggle _tooggleFullScreen;
+    [SerializeField] TMP_Dropdown _dropdownQaulity;
+    [SerializeField] Toggle _FullScreen;
+    [SerializeField] Toggle _SoftShadows;
+    [SerializeField] Toggle _postprocessing;
+
     [SerializeField] Slider _sliderMouseSensivity;
     [SerializeField] Slider _sliderSound;
     [SerializeField] Slider _sliderSoundEffects;
@@ -20,19 +24,33 @@ public class SettingsGameManager : MonoBehaviour
     [SerializeField] TMP_Text _textMouseSensivity;
     [SerializeField] TMP_Text _apply_text;
 
-    [SerializeField] SaveSettingsGame saveSettingsGame = null;
     private Color _startColorApplyBtn;
 
 
     private void Update() {
 
-        _textSoundEffects.text =_sliderSoundEffects.value.ToString("F2");
-        _textSound.text =_sliderSound.value.ToString("F2");
-        PlayerPrefs.SetFloat("SoundEffects", _sliderSoundEffects.value);
-        PlayerPrefs.SetFloat("Sound", _sliderSound.value);
-
         Cursor.lockState = CursorLockMode.None;
 		Cursor.visible = true;
+
+        _textSoundEffects.text =_sliderSoundEffects.value.ToString("F2");
+        _textSound.text =_sliderSound.value.ToString("F2");
+        _textMouseSensivity.text = _sliderMouseSensivity.value.ToString("F2");
+        PlayerPrefs.SetFloat("SoundEffects", _sliderSoundEffects.value);
+        PlayerPrefs.SetFloat("Sound", _sliderSound.value);
+        PlayerPrefs.SetFloat("MouseSensivity", _sliderMouseSensivity.value);
+
+        PlayerPrefs.SetInt("PP", Convert.ToInt32(_postprocessing.isOn));
+        PlayerPrefs.SetInt("FullScreen", Convert.ToInt32(_FullScreen.isOn));
+        PlayerPrefs.SetInt("SoftShadows", Convert.ToInt32(_SoftShadows.isOn));
+
+        if(PlayerPrefs.GetFloat("SoftShadows") == 1)
+        {
+            QualitySettings.shadows = ShadowQuality.All;
+        }
+        else
+        {
+            QualitySettings.shadows = ShadowQuality.HardOnly;
+        }
         
     }
     private void Start()
@@ -43,101 +61,45 @@ public class SettingsGameManager : MonoBehaviour
              PlayerPrefs.SetFloat("Sound", 0.9f);
         }
 
-         _sliderSoundEffects.value = PlayerPrefs.GetFloat("SoundEffects");
-       _sliderSound.value = PlayerPrefs.GetFloat("Sound");
-        _ScreenRes = Screen.resolutions;
-        Resolution currentRes = Screen.currentResolution;
-        int indxCurrentRes = 0;
-        bool isCurrentScreen = false;
-
-        foreach (Resolution screen in _ScreenRes)
-        {
-            _listScreenResolutions.Add(screen.width + "x" + screen.height);
-            if (currentRes.width == screen.width && currentRes.height == screen.height && !isCurrentScreen)
-                isCurrentScreen = true;
-            else if (!isCurrentScreen) indxCurrentRes++;
+        Resolution [] resolution =  Screen.resolutions;
+        res = resolution.Distinct().ToArray();
+        string[] strRes = new string[res.Length];
+        for (int i = 0; i < res.Length; i++){
+         strRes[i] = res[i].width.ToString() + "x" + res[i].height.ToString();  
         }
+        _dropdownScreenResolutions.AddOptions(strRes.ToList());
 
-        Debug.Log("index resolutions " + indxCurrentRes);
-        _dropdownScreenResolutions.ClearOptions();
-        _dropdownScreenResolutions.AddOptions(_listScreenResolutions);
-
-        _startColorApplyBtn = _apply_text.color;
-
-        saveSettingsGame = SaveSettingsGame.ReadSaveSettings();
-        if (saveSettingsGame == null)
+        if(PlayerPrefs.GetFloat("SoftShadows") == 1)
         {
-            _dropdownScreenResolutions.value = indxCurrentRes;
-            QualitySettings.antiAliasing = 0;
-            _dropdownSmoothing.value = 0;
-            _tooggleFullScreen.isOn = true;
-            return;
+            QualitySettings.shadows = ShadowQuality.All;
         }
-        _dropdownSmoothing.value = saveSettingsGame._levelSmoothing;
-        QualitySettings.antiAliasing = getAntiAlisaingDropDown();
-        Screen.fullScreen = saveSettingsGame._isFullScreen;
-        _tooggleFullScreen.isOn = saveSettingsGame._isFullScreen;
-        _dropdownScreenResolutions.value = saveSettingsGame._indexScreenResolutions;
-        saveSettingsGame._mouseSensivity = SaveSettingsGame.getSensivityMouse();
-        _sliderMouseSensivity.value = saveSettingsGame._mouseSensivity;
+        else
+        {
+            QualitySettings.shadows = ShadowQuality.HardOnly;
+        }
+        
+
+        _dropdownQaulity.AddOptions(QualitySettings.names.ToList());
+        _dropdownQaulity.value = QualitySettings.GetQualityLevel(); 
+   
+        _sliderSoundEffects.value = PlayerPrefs.GetFloat("SoundEffects");
+        _sliderSound.value = PlayerPrefs.GetFloat("Sound");
+        _sliderMouseSensivity.value = PlayerPrefs.GetFloat("MouseSensivity");
+        _postprocessing.isOn = Convert.ToBoolean(PlayerPrefs.GetInt("PP"));
+        _FullScreen.isOn = Convert.ToBoolean(PlayerPrefs.GetInt("FullScreen"));
+        _SoftShadows.isOn = Convert.ToBoolean(PlayerPrefs.GetInt("SoftShadows"));
+
 
         
     }
 
-    public void OnChangesInSettings ()
-    {
-        Debug.Log("Nachali");
-        if (_dropdownScreenResolutions.value != saveSettingsGame._indexScreenResolutions)
-            _apply_text.color = new Color(255, 255, 255, 255);
-        else _apply_text.color = _startColorApplyBtn;
-        if (_dropdownSmoothing.value != saveSettingsGame._levelSmoothing)
-            _apply_text.color = new Color(255, 255, 255, 255);
-        else _apply_text.color = _startColorApplyBtn;
-        if (_tooggleFullScreen.isOn != saveSettingsGame._isFullScreen)
-            _apply_text.color = new Color(255, 255, 255, 255);
-        else _apply_text.color = _startColorApplyBtn;
-        if (_sliderMouseSensivity.value != saveSettingsGame._mouseSensivity)
-            _apply_text.color = new Color(255, 255, 255, 255);
-        else _apply_text.color = _startColorApplyBtn;
-    }
-
-    public void OnTabSliderSensivity()
-    {
-        _textMouseSensivity.text = _sliderMouseSensivity.value.ToString("F2");
-    }
-
-    public void OnSettingsApply()
-    {
-        if (_apply_text.color == _startColorApplyBtn) return;
-        int indx = _dropdownScreenResolutions.value;
-        SaveSettingsGame saveSettings = new SaveSettingsGame(indx, _dropdownSmoothing.value, _tooggleFullScreen.isOn);
-        float sensivity = _sliderMouseSensivity.value;
-
-        Debug.Log(sensivity + "Sensivity okr");
-        saveSettings.setSensivityMouse = sensivity;
-
-        SaveSettingsGame.AsyncWriteSaveSettngs(saveSettings);
-        Screen.fullScreen = _tooggleFullScreen.isOn;
-        Screen.SetResolution(_ScreenRes[indx].width, _ScreenRes[indx].height, _tooggleFullScreen.isOn);
-        QualitySettings.antiAliasing = getAntiAlisaingDropDown();
-        _apply_text.color = _startColorApplyBtn;
-
-        
+    public void setQuality(){
+    QualitySettings.SetQualityLevel(_dropdownQaulity.value);
 
     }
-
-    private int getAntiAlisaingDropDown()
-    {
-        int value = _dropdownSmoothing.value;
-        if (value == 0)
-            return 0;
-        if (value == 1)
-            return 2;
-        if (value == 2)
-            return 3;
-        return 4;
+    public void SetRes(){
+        Screen.SetResolution(res[_dropdownScreenResolutions.value].width,res[_dropdownScreenResolutions.value].height,true);
     }
-
 }
 
 

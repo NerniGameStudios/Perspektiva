@@ -29,14 +29,15 @@ Vector3 scll;
     
     void LateUpdate()
     {
-   
+        if(Pause.IsPaused){return;}
+        
         Ray ray = new Ray(transform.position,transform.forward);
         
 
 
         RaycastHit hit;
         Physics.Raycast(ray,out hit);
-
+        
         if(!flagObj)
         {
             if(hit.collider.gameObject.tag == "Obj" || hit.collider.gameObject.tag == "Lens" || hit.collider.gameObject.tag == "ObjS")

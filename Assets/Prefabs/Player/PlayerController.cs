@@ -1,6 +1,6 @@
-using System;
-using System.Threading;
 using UnityEngine;
+
+
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,17 +10,18 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float speed = 3f;
     [SerializeField] private float Jump = 2f;
     [SerializeField] private float distanceRay = 1.2f;
+   
     private void Start()
     {
         _characterContoller = GetComponent<CharacterController>();
         rb = GetComponent<Rigidbody>();
         
+        
     }
 
 
     void Update() {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+       
     //f(_characterContoller.isGrounded)if(Input.GetKeyDown(KeyCode.Space))Jmp();
     }
     void FixedUpdate() {

@@ -24,13 +24,12 @@ public class MouseLook : MonoBehaviour
 		Cursor.visible = false;
 			
 		Application.runInBackground = true;
-		sensitivityHor = SaveSettingsGame.getSensivityMouse();
-		sensitivityVert = SaveSettingsGame.getSensivityMouse();
+		sensitivityHor = PlayerPrefs.GetFloat("MouseSensivity");
+		sensitivityVert = PlayerPrefs.GetFloat("MouseSensivity");
 
     }
 	void LateUpdate() {
-		Cursor.lockState = CursorLockMode.Locked;
-		Cursor.visible = false;
+		
 		
 		if (axes == RotationAxes.MouseX) {         
 			transform.Rotate (0, Input.GetAxis ("Mouse X") * sensitivityHor* Time.deltaTime * 100, 0);
